@@ -1,10 +1,6 @@
 <template>
   <q-page>
     <div class="text-h6 text-center q-pt-lg" v-if="isFetching">
-      <p class="q-pb-md">
-        Wait lang niloload pa yung lahat ng json data eh. <br/>
-        Kailangan ko na matuto mag GraphQL. <br/>
-      </p>
       <q-spinner color="primary" size="3em" :thickness="5"/>
     </div>
 
