@@ -10,9 +10,9 @@
 
     <div class="dashboard row q-col-gutter-lg" v-else>
       <!--FIRST SECTION-->
-      <div class="dashboard__section1 col-12 col-md-8">
+      <div class="dashboard__section1 col-12 col-md-12">
         <!--TOTAL REPORT-->
-        <div :class="`total row ${$q.platform.is.mobile ? '' : 'q-gutter-lg q-mb-lg'}`">
+        <div :class="`total row ${$q.platform.is.mobile ? '' : 'q-gutter-lg'}`">
           <q-card flat bordered :class="`col-12 col-md text-center ${$q.platform.is.mobile ? 'q-mb-lg' : ''}`"
                   v-for="item in total" :key="item.label">
             <q-card-section>
@@ -23,16 +23,16 @@
         </div>
 
         <!--MAP-->
-        <div class="map">
+<!--        <div class="map">
           <q-card flat bordered class="col text-center">
             <q-card-section>
               Gusto ko mapa dito maganda
             </q-card-section>
           </q-card>
-        </div>
+        </div>-->
       </div>
 
-      <div class="dashboard__section2 col-12 col-md">
+      <div class="dashboard__section2 col-12 col-md-12">
         <!--COUNTRIES-->
         <div>
           <q-card flat bordered class="col text-center">
