@@ -39,7 +39,7 @@
                 <q-list bordered separator>
                   <q-item clickable v-ripple
                           v-for="confirm in FilteredCountries" :key="confirm.key"
-                          @click="ShowCountryModal({})">
+                          @click="ShowCountryModal(confirm.key)">
                     <q-item-section>{{confirm.country}}</q-item-section>
                     <q-item-section>
                       <span style="color: grey">Confirmed: {{FormatNumber(confirm.num)}}</span>
@@ -61,6 +61,8 @@
 </template>
 
 <script>
+  import {date} from "quasar"
+
   import "./IndexStyle.scss"
   import CountryModal from "./CountryModal"
 
@@ -78,6 +80,7 @@
         {label: 'Deaths'         , color: 'red'   , num: "0"},
       ],
       confirmedByCountry: [],
+      historyByCountry: [],
       allData: []
     }),
     computed: {
@@ -130,13 +133,57 @@
           }
         });
 
+        // Get Data History By Country
+        const historyByCountry = countryCodes.map(code => {
+          const index = allData.confirmed.locations.findIndex(i => i.country_code === code);
+
+          const getHistory = (arr) => {
+            const collectedHistories = {};
+
+            const histories = arr.filter(i => i.country_code === code).map(i => i.history);
+
+            // Initialize Available Dates
+            const dates = Object.keys(histories[0]);
+            dates.forEach(date => {
+              collectedHistories[date] = 0;
+            });
+
+            // Summarize data
+            histories.forEach(history => {
+              dates.forEach(date => {
+                collectedHistories[date] += Number(history[date])
+              })
+            });
+
+            // Convert object to array and sort
+            const historyArray = Object.keys(collectedHistories).map(_date => {
+              return {
+                dateId : date.formatDate(_date, 'YYYYMMDD'),
+                date   : date.formatDate(_date, 'MMMM DD, YYYY'),
+                value  : collectedHistories[_date],
+              }
+            });
+
+            return historyArray.sort((a, b) => Number(b.dateId) - Number(a.dateId));
+          };
+
+          return {
+            key       : code,
+            country   : allData.confirmed.locations[index].country,
+            confirmed : getHistory(allData.confirmed.locations),
+            recovered : getHistory(allData.recovered.locations),
+            deaths    : getHistory(allData.deaths.locations)
+          }
+        });
 
         this.confirmedByCountry = confirmedByCountry.sort((a ,b) => Number(b.num) - Number(a.num));
+        this.historyByCountry   = historyByCountry;
 
         this.isFetching = false;
       },
-      ShowCountryModal(data) {
-        this.$refs.countryModalRef.ShowModal()
+      ShowCountryModal(countryCode) {
+        const data = this.historyByCountry.filter(h => h.key === countryCode)[0];
+        this.$refs.countryModalRef.ShowModal(data)
       }
     },
     mounted() {

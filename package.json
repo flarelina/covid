@@ -2,7 +2,7 @@
   "name": "covid",
   "version": "0.0.1",
   "description": "A Quasar Framework app",
-  "productName": "Convid19 Monitoring Website",
+  "productName": "Covid-19 Cases Monitoring",
   "cordovaId": "org.cordova.quasar.app",
   "capacitorId": "",
   "author": "Jolina Coronel",
