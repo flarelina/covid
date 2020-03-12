@@ -1,44 +1,45 @@
 <template>
   <q-page>
-    <div class="text-h6 text-center q-pt-lg" v-if="isFetching">
+<!--    <div class="text-h6 text-center q-pt-lg" v-if="isFetching">
       <q-spinner color="primary" size="3em" :thickness="5"/>
-    </div>
+    </div>-->
 
-    <div class="dashboard row q-col-gutter-lg" v-else>
+    <div class="dashboard">
+      <!--TITLE-->
+      <div class="dashboard__title">
+        COVID-19 CASES
+      </div>
+
       <!--FIRST SECTION-->
-      <div class="dashboard__section1 col-12 col-md-12">
+      <div class="dashboard__section1">
         <!--TOTAL REPORT-->
-        <div :class="`total row ${$q.platform.is.mobile ? '' : 'q-gutter-lg'}`">
-          <q-card flat bordered :class="`col-12 col-md text-center ${$q.platform.is.mobile ? 'q-mb-lg' : ''}`"
+        <div  :class="`total row ${$q.platform.is.mobile ? '' : 'q-gutter-lg'}`">
+          <q-card flat :class="`total--item col-12 col-md text-center ${$q.platform.is.mobile ? 'q-mb-lg' : 'q-mb-lg'}`"
                   v-for="item in total" :key="item.label">
             <q-card-section>
-              <div class="text-grey-7"><b>{{item.label.toUpperCase()}}</b></div>
-              <div class="text-h4 q-pt-md" :style="{color: item.color}">{{FormatNumber(item.num)}}</div>
+              <div :style="{color: item.color}">
+                <q-icon class="q-pb-xs q-pr-sm" dense name="fiber_manual_record" />
+                <b>{{item.label.toUpperCase()}}</b>
+              </div>
+              <div class="text-h4 q-pt-md">{{FormatNumber(item.num)}}</div>
             </q-card-section>
           </q-card>
         </div>
-
-        <!--MAP-->
-<!--        <div class="map">
-          <q-card flat bordered class="col text-center">
-            <q-card-section>
-              Gusto ko mapa dito maganda
-            </q-card-section>
-          </q-card>
-        </div>-->
       </div>
 
-      <div class="dashboard__section2 col-12 col-md-12">
+      <div class="dashboard__section2">
         <!--COUNTRIES-->
         <div>
-          <q-card flat bordered class="col text-center">
+          <q-card flat class="table col text-center">
             <q-card-section>
-              <q-input stack-label filled v-model="filter.search" label="Search" />
+              <q-input stack-label filled dark v-model="filter.search" label="Search" />
 
               <!--LIST OF COUNTRIES-->
               <q-scroll-area bordered  class="q-mt-lg" style="height: 450px;">
                 <q-list bordered separator>
-                  <q-item clickable v-ripple v-for="confirm in FilteredCountries" :key="confirm.key">
+                  <q-item clickable v-ripple
+                          v-for="confirm in FilteredCountries" :key="confirm.key"
+                          @click="ShowCountryModal({})">
                     <q-item-section>{{confirm.country}}</q-item-section>
                     <q-item-section>
                       <span style="color: grey">Confirmed: {{FormatNumber(confirm.num)}}</span>
@@ -53,16 +54,19 @@
         </div>
       </div>
     </div>
+
+    <!--MODAL-->
+    <country-modal ref="countryModalRef"></country-modal>
   </q-page>
 </template>
 
 <script>
   import "./IndexStyle.scss"
-  import Mapa from "./Mapa"
+  import CountryModal from "./CountryModal"
 
   export default {
     name: 'PageIndex',
-    components: {Mapa},
+    components: {CountryModal},
     data: () => ({
       isFetching: true,
       filter: {
@@ -130,6 +134,9 @@
         this.confirmedByCountry = confirmedByCountry.sort((a ,b) => Number(b.num) - Number(a.num));
 
         this.isFetching = false;
+      },
+      ShowCountryModal(data) {
+        this.$refs.countryModalRef.ShowModal()
       }
     },
     mounted() {

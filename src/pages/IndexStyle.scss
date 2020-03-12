@@ -1,20 +1,29 @@
 .dashboard {
+  background-color: $primary;
   padding: 20px;
+  color: white;
+
+  &__title {
+    color: rgb(56, 63, 107);
+    text-align: center;
+    padding-bottom: 20px;
+    font-size: 30px;
+  }
 
   &__section1 {
 
     .total {
       &--item {
-
-
-
+        background-color: rgb(38, 43, 73)
       }
     }
 
-    .map {
-    }
   }
 
   &__section2 {
+    color: white;
+    .table {
+      background-color: rgb(38, 43, 73)
+    }
   }
 }
