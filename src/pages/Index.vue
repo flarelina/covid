@@ -1,10 +1,12 @@
 <template>
-  <q-page>
-<!--    <div class="text-h6 text-center q-pt-lg" v-if="isFetching">
-      <q-spinner color="primary" size="3em" :thickness="5"/>
-    </div>-->
-
-    <div class="dashboard">
+  <q-page class="bg-primary">
+   <div class="loader fixed-center text-center q-pt-lg" v-if="isFetching">
+      <q-spinner-ios class="loader__spinner" size="5em" :thickness="5"/>
+      <div class="text-white q-pt-lg">
+        Retrieving Data ...
+      </div>
+    </div>
+    <div class="dashboard" v-else>
       <!--TITLE-->
       <div class="dashboard__title">
         COVID-19 CASES

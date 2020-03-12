@@ -1,3 +1,9 @@
+.loader {
+  &__spinner {
+    color: rgb(68, 78, 135)
+  }
+}
+
 .dashboard {
   background-color: $primary;
   padding: 20px;
