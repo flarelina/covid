@@ -8,13 +8,19 @@
             :style="!$q.platform.is.mobile ? 'min-width: 60%; max-width: 80vw;' : ''">
       <!--TITLE-->
       <q-card-section class="title">
-        <span class="text-h6">{{country}}</span>
+        <span class="text-h6">COVID-19 CASES</span>
         <q-btn icon="close" class="float-right shadow-0" size="sm" flat @click="HideModal"/>
       </q-card-section>
       <q-separator />
 
       <!--CONTENT-->
       <q-card-section :style="`max-height: ${$q.platform.is.mobile ? '80vh' : '70vh'}`" class="scroll">
+        <!--CHART-->
+        <div id="chart">
+          <apex-chart type="line" height="350" :options="chartOptions" :series="series"></apex-chart>
+        </div>
+
+        <!--TABLE--->
         <q-table card-class="table text-white"
                  flat
                  :data="history"
@@ -43,8 +49,13 @@
 </template>
 
 <script>
+  import ApexChart from 'vue-apexcharts'
+
   export default {
     name: "CountryModal.vue",
+    components: {
+      ApexChart
+    },
     data: () => ({
       isShowModal: false,
       country: '',
@@ -55,7 +66,69 @@
           recovered: 34,
           deaths: 43,
         }
-      ]
+      ],
+      series: [
+        {
+          name: 'Confirmed',
+          data: []
+        },
+        {
+          name: 'Recovered',
+          data: []
+        },
+        {
+          name: 'Deaths',
+          data: []
+        }
+      ],
+      chartOptions: {
+        chart: {
+          height: 350,
+          type: 'line',
+        },
+        stroke: {
+          width: 7,
+          curve: 'smooth'
+        },
+        xaxis: {
+          type: 'Date',
+          categories: [],
+        },
+        title: {
+          text: '',
+          align: 'left',
+          style: {
+            fontSize: "16px",
+            color: '#666'
+          }
+        },
+        fill: {
+          type: 'gradient',
+          gradient: {
+            shade: 'dark',
+            gradientToColors: [ '#FDD835'],
+            shadeIntensity: 1,
+            type: 'horizontal',
+            opacityFrom: 1,
+            opacityTo: 1,
+            stops: [0, 100, 100, 100]
+          },
+        },
+        markers: {
+          size: 4,
+          colors: ["#FFA41B"],
+          strokeColors: "#fff",
+          strokeWidth: 2,
+          hover: {
+            size: 7,
+          }
+        },
+        yaxis: {
+          title: {
+            text: 'Cases',
+          },
+        }
+      }
     }),
     methods: {
       FormatNumber(num){
@@ -67,6 +140,7 @@
       ShowModal(data) {
         this.country = data.country;
 
+        // Table Data
         this.history = data.confirmed.map((c, i) => {
           return {
             date      : c.date,
@@ -76,6 +150,15 @@
           }
         });
 
+        // Chart Data
+        this.chartOptions.title.text = data.country;
+
+        this.chartOptions.xaxis.categories = data.confirmed.map(c => c.date).reverse();
+        this.series[0].data = data.confirmed.map((d, i) => data.confirmed[i].value).reverse();
+        this.series[1].data = data.confirmed.map((d, i) => data.recovered[i].value).reverse();
+        this.series[2].data = data.confirmed.map((d, i) => data.deaths[i].value).reverse();
+
+
         this.isShowModal = true;
       },
       HideModal() {
@@ -83,10 +166,10 @@
       }
     },
     columns: [
-      { name: 'date'      , label: 'Date'       , field: 'date'      , sortable: true},
-      { name: 'confirmed' , label: 'C'  , field: 'confirmed' , sortable: true},
-      { name: 'recovered' , label: 'R'  , field: 'recovered' , sortable: true},
-      { name: 'deaths'    , label: 'D'     , field: 'deaths'     , sortable: true},
+      { name: 'date'      , label: 'Date' , field: 'date'      , sortable: true},
+      { name: 'confirmed' , label: 'Confirmed'    , field: 'confirmed' , sortable: true},
+      { name: 'recovered' , label: 'Recovered'    , field: 'recovered' , sortable: true},
+      { name: 'deaths'    , label: 'Deaths'    , field: 'deaths'     , sortable: true},
     ]
   }
 </script>

@@ -31,8 +31,14 @@
 
       <div class="dashboard__section2">
         <!--COUNTRIES-->
-        <div>
-          <q-card flat class="table col text-center">
+        <div :class="`row ${$q.platform.is.mobile ? '' : 'q-gutter-lg'}`">
+          <q-card flat class="graph col-12 col-md text-center q-mb-lg">
+            <q-card-section>
+              <global-graph :historyByCountry="historyByCountry"></global-graph>
+            </q-card-section>
+          </q-card>
+
+          <q-card flat class="table col-12 col-md text-center q-mb-lg">
             <q-card-section>
               <q-input stack-label filled dark v-model="filter.search" label="Search" />
 
@@ -63,14 +69,16 @@
 </template>
 
 <script>
+  import "./IndexStyle.scss"
+
   import {date} from "quasar"
 
-  import "./IndexStyle.scss"
   import CountryModal from "./CountryModal"
+  import GlobalGraph  from "./GlobalGraph"
 
   export default {
     name: 'PageIndex',
-    components: {CountryModal},
+    components: {CountryModal, GlobalGraph},
     data: () => ({
       isFetching: true,
       filter: {
@@ -107,7 +115,6 @@
           .catch(error=>{
             console.log(error)
           });
-
 
         // Total Confirmed, Recovered and Deaths
         this.total[0].num = this.FormatNumber(allData.confirmed.latest);
@@ -161,7 +168,7 @@
             const historyArray = Object.keys(collectedHistories).map(_date => {
               return {
                 dateId : date.formatDate(_date, 'YYYYMMDD'),
-                date   : date.formatDate(_date, 'MMMM DD, YYYY'),
+                date   : date.formatDate(_date, 'MM/DD'),
                 value  : collectedHistories[_date],
               }
             });
