@@ -37,7 +37,7 @@
               <q-td key="recovered" class="text-green">
                 {{ props.row.recovered }}
               </q-td>
-              <q-td key="deaths" class="text-red">
+              <q-td key="deaths" style="color: #ff9800">
                 {{ props.row.deaths }}
               </q-td>
             </q-tr>

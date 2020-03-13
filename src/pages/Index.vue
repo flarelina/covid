@@ -50,9 +50,9 @@
                           @click="ShowCountryModal(confirm.key)">
                     <q-item-section>{{confirm.country}}</q-item-section>
                     <q-item-section>
-                      <span style="color: grey">Confirmed: {{FormatNumber(confirm.num)}}</span>
-                      <span style="color: green">Recovered: {{FormatNumber(confirm.recovered)}}</span>
-                      <span style="color: red">Deaths: {{FormatNumber(confirm.deaths)}}</span>
+                      <span style="color: #008FFB">Confirmed: {{FormatNumber(confirm.num)}}</span>
+                      <span style="color: #15ff15">Recovered: {{FormatNumber(confirm.recovered)}}</span>
+                      <span style="color: #ff9800">Deaths: {{FormatNumber(confirm.deaths)}}</span>
                     </q-item-section>
                   </q-item>
                 </q-list>
@@ -85,9 +85,9 @@
         search: ''
       },
       total: [
-        {label: 'Confirmed Cases', color: 'gray'  , num: "0"},
-        {label: 'Recovered'      , color: 'green' , num: "0"},
-        {label: 'Deaths'         , color: 'red'   , num: "0"},
+        {label: 'Confirmed Cases', color: '#008FFB'  , num: "0"},
+        {label: 'Recovered'      , color: '#15ff15' , num: "0"},
+        {label: 'Deaths'         , color: '#ff9800'   , num: "0"},
       ],
       confirmedByCountry: [],
       historyByCountry: [],
