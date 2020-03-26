@@ -153,12 +153,13 @@
 
             // Initialize Available Dates
             const dates = Object.keys(histories[0]);
+
             dates.forEach(date => {
               collectedHistories[date] = 0;
             });
 
             // Summarize data
-            histories.forEach(history => {
+            [...histories].forEach(history => {
               dates.forEach(date => {
                 collectedHistories[date] += Number(history[date])
               })
@@ -179,9 +180,9 @@
           return {
             key       : code,
             country   : allData.confirmed.locations[index].country,
-            confirmed : getHistory(allData.confirmed.locations),
+   /*         confirmed : getHistory(allData.confirmed.locations),
             recovered : getHistory(allData.recovered.locations),
-            deaths    : getHistory(allData.deaths.locations)
+            deaths    : getHistory(allData.deaths.locations)*/
           }
         });
 
